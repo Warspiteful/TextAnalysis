@@ -1,8 +1,8 @@
 # TextAnalysis
-Text Analysis Program designed for Telegram-exported JSon files
+Text Analysis Program designed for Telegram-exported JSON files
 
 ## Files
-`TextWriter.py` - Contains the `write_file()` command, which reads JSon files and writes the contents to a .txt file \
+`TextWriter.py` - Contains the `write_file()` command, which reads JSON files and writes the contents to a .txt file \
 `analysis.py` - Contains the textAnalyst class, detailed below
 
 ## Text Analyst Class
@@ -16,7 +16,7 @@ User file can be linked to existing text files:
 * Path to text file
 * List of paths to text files
 
-User file can also be linked to a json file with a provided user to look for and a path for a text file
+User file can also be linked to a JSON file with a provided user to look for and a path for a text file
 
 #### Usage
 ```python
