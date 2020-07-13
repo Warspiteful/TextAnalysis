@@ -1,9 +1,9 @@
 import json, re, emoji, os
 from fileNames import file1, text1, text2, name2, file2, text3, text4, name3
 
-def read_file():
-    writer = open(text3,"a") 
-    with open(file2,encoding="utf8") as f:
+def write_file(file_path, name, text_path):
+    writer = open(text_path,"a") 
+    with open(file_path,encoding="utf8") as f:
         data = json.load(f)
 
 
@@ -36,7 +36,7 @@ def read_file():
 
 
     for message in data:
-        if message.get('from') == name2:
+        if message.get('from') == name:
             if type(message.get('text')) is not list:
                 texts.append(message.get('text'))
     for text in texts:
@@ -51,5 +51,3 @@ def read_file():
         writer.write(str((clean_text)))
         writer.write('\n')
     writer.close()
-
-print(read_file())
