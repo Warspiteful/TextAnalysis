@@ -24,12 +24,29 @@ class textAnalyst():
             print("Invalid File Path")
             sys.exit()
 
+
     def set_text(self,user_file):
         if type(user_file) == list:
-            if len(user_file) == 3:
+            if user_file[0][-4:] == 'json':
+                
+                if len(user_file) > 3:
+                    raise TypeError("Too many arguments provided in JSon list")
+                    sys.exit()
                 print("Reading json file from \'" + user_file[0] + "\'")
-                print("Looking for messages from " + user_file[1])
-                print("Writing text to and reading text from \'" + user_file[2] + "\'")
+
+                try:
+                    print("Looking for messages from " + user_file[1])
+                except Exception:
+                    raise NameError('User Missing. Please try again') from None
+                    sys.exit()
+                
+                try:
+                    print("Writing text to and reading text from \'" + user_file[2] + "\'")
+                except Exception:
+                    print("No text file path provided. Created \'default.txt\' in local directory.")
+                    user_file[2] = ( 'default.txt')
+              
+                
                 write_file(user_file[0],user_file[1],user_file[2])
                 self.text = self.read_file(user_file[2])
                 self.processed_text = self.process(self.text)
@@ -45,7 +62,8 @@ class textAnalyst():
             self.text = self.read_file(user_file)
             self.processed_text = self.process(self.text)
         else:
-            print("Invalid Input.")
+            raise Exception("Invalid Input.")
+
 
         if hasattr(self,'processed_text'):
             print("The 10 most frequent words in this text file are: ")
