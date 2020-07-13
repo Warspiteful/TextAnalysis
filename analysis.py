@@ -5,24 +5,38 @@ from nltk.tokenize import PunktSentenceTokenizer
 from collections import Counter
 import gensim
 from TextWriter import write_file
+import ntpath
 
 class textAnalyst():
 
     def __init__(self, user_file):
         self.set_text(user_file)
         
-            
-
     stop_words = stopwords.words('english')
     stop_words += ["like","want","know","ye","idk","i'm","really","kinda","ah","ok","oof","oh","mhm","hmm","also","lol","lmao","yeah","ooh","u"]
-    
+    text_files = []
+
     def read_file(self,file_name):
         try:
+            
             with open(file_name, 'r+', encoding='utf-8') as file:
-                return file.read()
-        except:
-            print("Invalid File Path")
-            sys.exit()
+                file = file.read()
+            self.text_files.append(ntpath.basename(file_name))
+            return file
+        except Exception:
+            if len(self.text_files) > 0:
+                print("Invalid File Path")
+            else:
+                raise NameError("Invalid File Path") from None
+
+    def append_text(self,text_file):
+        pass
+
+    def print_text_files(self):
+        print("Included in this model:")
+        for file in self.text_files:
+            print(ntpath.basename(file))
+
 
 
     def set_text(self,user_file):
@@ -39,26 +53,26 @@ class textAnalyst():
                 except Exception:
                     raise NameError('User Missing. Please try again') from None
                     sys.exit()
-                
                 try:
-                    print("Writing text to and reading text from \'" + user_file[2] + "\'")
+                    print("Writing text to and reading text from \'" + ntpath.basename(user_file[2]) + "\'")
                 except Exception:
                     print("No text file path provided. Created \'default.txt\' in local directory.")
                     user_file[2] = ( 'default.txt')
-              
-                
                 write_file(user_file[0],user_file[1],user_file[2])
                 self.text = self.read_file(user_file[2])
                 self.processed_text = self.process(self.text)
             else:
-                compiled = [self.process(read_file(text)) for text in user_file]
+                text = [self.read_file(text) for text in user_file]
+                self.text = "".join(text)
+                compiled = [self.process(texts) for texts in text]
                 all_sentences = list()
                 for file in compiled:
                     for sentence in file:
                         all_sentences.append(sentence)
                 self.processed_text = all_sentences
-                self.text = all_sentences
+            
         elif type(user_file) == str:
+            print("Reading from " + ntpath.basename(user_file))
             self.text = self.read_file(user_file)
             self.processed_text = self.process(self.text)
         else:
