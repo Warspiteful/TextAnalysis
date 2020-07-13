@@ -22,6 +22,7 @@ class textAnalyst():
             self.text = read_file(writing_list[2])
         if text_file:
             self.text = read_file(text_file)
+        if hasattr(self,'text'):
             self.processed_text = self.process(self.text)
         if list_of_text:
             compiled = [self.process(read_file(text)) for text in list_of_text]
