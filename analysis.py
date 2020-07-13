@@ -10,9 +10,11 @@ import ntpath
 class textAnalyst():
     stop_words = stopwords.words('english')
     text_files = []
+
     text = ""
     processed_text = []
-    
+    text_fields = [text,processed_text]
+
     def __init__(self, user_file):
         self.set_stopwords()
         self.append_text(user_file)
@@ -37,7 +39,7 @@ class textAnalyst():
             
             with open(file_name, 'r+', encoding='utf-8') as file:
                 file = file.read()
-            self.text_files.append(ntpath.basename(file_name))
+            self.text_files.append(file_name)
             return file
         except Exception:
             if len(self.text_files) > 0:
@@ -51,6 +53,17 @@ class textAnalyst():
         for file in self.text_files:
             print(ntpath.basename(file))
 
+    def remove_text_file(self,file_name):
+        
+        for file in enumerate(self.text_files):
+            if file_name in ntpath.basename(file[1]):    
+                print("\nRemoving " + ntpath.basename(file_name) + " from the model.")
+                del self.text_files[file[0]]
+                self.text = ""
+                self.processed_text = []
+                self.append_text(self.text_files)
+                return
+        print("File not found")
 
 
     def append_text(self,user_file):
