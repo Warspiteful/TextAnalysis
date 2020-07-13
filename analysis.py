@@ -1,10 +1,5 @@
-import os
-
-import spacy
-from functions import read_file, process_speeches, merge_speeches, get_president_sentences, get_presidents_sentences, most_frequent_words
 from fileNames import text1, text2, text3, text4
-import nltk, re
-from nltk.corpus import wordnet
+import re
 from nltk.corpus import stopwords
 from nltk.tokenize import PunktSentenceTokenizer
 from collections import Counter
@@ -13,25 +8,51 @@ from TextWriter import write_file
 
 class textAnalyst():
 
-    def __init__(self, writing_list = None, text_file = None, list_of_text = None):
-        if writing_list:
-            print("Reading json file from \'" + writing_list[0] + "\'")
-            print("Looking for messages from " + writing_list[1])
-            print("Writing text to and reading text from \'" + writing_list[2] + "\'")
-            write_file(writing_list[0],writing_list[1],writing_list[2])
-            self.text = read_file(writing_list[2])
-        if text_file:
-            self.text = read_file(text_file)
-        if hasattr(self,'text'):
+    def __init__(self, user_file):
+        if type(user_file) == list:
+            if len(user_file) == 3:
+                print("Reading json file from \'" + user_file[0] + "\'")
+                print("Looking for messages from " + user_file[1])
+                print("Writing text to and reading text from \'" + user_file[2] + "\'")
+                write_file(user_file[0],user_file[1],user_file[2])
+                self.text = self.read_file(user_file[2])
+                self.processed_text = self.process(self.text)
+            else:
+                compiled = [self.process(read_file(text)) for text in user_file]
+                all_sentences = list()
+                for file in compiled:
+                    for sentence in file:
+                        all_sentences.append(sentence)
+                self.processed_text = all_sentences
+                self.text = all_sentences
+        elif type(user_file) == str:
+            self.text = self.read_file(user_file)
             self.processed_text = self.process(self.text)
-        if list_of_text:
-            compiled = [self.process(read_file(text)) for text in list_of_text]
-            all_sentences = list()
-            for file in compiled:
-                for sentence in file:
-                    all_sentences.append(sentence)
-            self.processed_text = all_sentences
-            self.text = all_sentences
+        else:
+            print("Invalid Input.")
+
+
+                
+                
+        #if writing_list:
+         #   print("Reading json file from \'" + writing_list[0] + "\'")
+          #  print("Looking for messages from " + writing_list[1])
+           # print("Writing text to and reading text from \'" + writing_list[2] + "\'")
+            #write_file(writing_list[0],writing_list[1],writing_list[2])
+            #self.text = self.read_file(writing_list[2])
+        #if text_file:
+         #   self.text = self.read_file(text_file)
+        #if hasattr(self,'text'):
+        #    self.processed_text = self.process(self.text)
+        #if list_of_text:
+        #    compiled = [self.process(read_file(text)) for text in list_of_text]
+        #    all_sentences = list()
+        #    for file in compiled:
+        #        for sentence in file:
+        #            all_sentences.append(sentence)
+        #    self.processed_text = all_sentences
+        #    self.text = all_sentences
+
         if hasattr(self,'processed_text'):
             print("The 10 most frequent words in this text file are: ")
             for word in self.most_frequent_words(10):
@@ -42,8 +63,12 @@ class textAnalyst():
     stop_words += ["like","want","know","ye","idk","i'm","really","kinda","ah","ok","oof","oh","mhm","hmm","also","lol","lmao","yeah","ooh","u"]
     
     def read_file(self,file_name):
-        with open(file_name, 'r+', encoding='utf-8') as file:
-            return file.read()
+
+        try:
+            with open(file_name, 'r+', encoding='utf-8') as file:
+                return file.read()
+        except:
+            print("Invalid File Path")
 
     def set_text(self,file_name):
         self.text = self.read_file(file_name)

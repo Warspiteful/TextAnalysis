@@ -1,4 +1,4 @@
-import json, re, emoji, os
+import json, re, emoji
 from fileNames import file1, text1, text2, name2, file2, text3, text4, name3
 
 def write_file(file_path, name, text_path):
@@ -9,9 +9,6 @@ def write_file(file_path, name, text_path):
 
     #List of Dictionaries
     data = data["messages"]
-
-    i = 0
-    j = 0
     texts = []
 
     emoji_pattern = re.compile("["
