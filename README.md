@@ -46,6 +46,6 @@ This will bring you back to the Chat Export Settings. Note the path next to form
 ![Image of final menu](https://i.imgur.com/1bVTWFG.png) \
 Upon successful export, you will be prompted to press 'Show My Data' as seen below. Select it. \
 ![Successful Export](https://i.imgur.com/mTdtgKa.png) \
-This will pull up result.json file. Provide the path, including the 'result.json' to user_file along with the user and path to text file. 
+This will pull up result.json file. Provide the path, including the 'result.json' to user_file along with the user and path to text file. \
 ![JSon File Location](https://i.imgur.com/KWISjOT.png)
 
