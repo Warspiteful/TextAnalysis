@@ -1,9 +1,9 @@
 import json, re, emoji, os
-from fileNames import file1, text1, text2, name2
+from fileNames import file1, text1, text2, name2, file2, text3, text4, name3
 
 def read_file():
-    writer = open(text2,"a") 
-    with open(file1,encoding="utf8") as f:
+    writer = open(text3,"a") 
+    with open(file2,encoding="utf8") as f:
         data = json.load(f)
 
 
