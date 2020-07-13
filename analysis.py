@@ -10,11 +10,17 @@ import ntpath
 class textAnalyst():
 
     def __init__(self, user_file):
-        self.set_text(user_file)
+        self.append_text(user_file)
+        if hasattr(self,'processed_text'):
+            print("\nThe 10 most frequent words in this text file are: ")
+            for word in self.most_frequent_words(10):
+                print(word[0])
         
     stop_words = stopwords.words('english')
     stop_words += ["like","want","know","ye","idk","i'm","really","kinda","ah","ok","oof","oh","mhm","hmm","also","lol","lmao","yeah","ooh","u"]
     text_files = []
+    text = ""
+    processed_text = []
 
     def read_file(self,file_name):
         try:
@@ -28,25 +34,23 @@ class textAnalyst():
                 print("Invalid File Path")
             else:
                 raise NameError("Invalid File Path") from None
-
-    def append_text(self,text_file):
-        pass
+        
 
     def print_text_files(self):
-        print("Included in this model:")
+        print("\nIncluded in this model:")
         for file in self.text_files:
             print(ntpath.basename(file))
 
 
 
-    def set_text(self,user_file):
+    def append_text(self,user_file):
         if type(user_file) == list:
             if user_file[0][-4:] == 'json':
                 
                 if len(user_file) > 3:
                     raise TypeError("Too many arguments provided in JSon list")
                     sys.exit()
-                print("Reading json file from \'" + user_file[0] + "\'")
+                print("\nReading json file from \'" + user_file[0] + "\'")
 
                 try:
                     print("Looking for messages from " + user_file[1])
@@ -59,30 +63,26 @@ class textAnalyst():
                     print("No text file path provided. Created \'default.txt\' in local directory.")
                     user_file[2] = ( 'default.txt')
                 write_file(user_file[0],user_file[1],user_file[2])
-                self.text = self.read_file(user_file[2])
-                self.processed_text = self.process(self.text)
+                self.text += self.read_file(user_file[2])
+                self.processed_text += self.process(self.text)
             else:
+                print("\nReading from:\n" + "\n".join([ntpath.basename(file) for file in user_file]))
                 text = [self.read_file(text) for text in user_file]
-                self.text = "".join(text)
+                self.text += "".join(text)
                 compiled = [self.process(texts) for texts in text]
                 all_sentences = list()
                 for file in compiled:
                     for sentence in file:
                         all_sentences.append(sentence)
-                self.processed_text = all_sentences
+                self.processed_text += all_sentences
             
         elif type(user_file) == str:
-            print("Reading from " + ntpath.basename(user_file))
-            self.text = self.read_file(user_file)
-            self.processed_text = self.process(self.text)
+            print("\nReading from " + ntpath.basename(user_file))
+            self.text += self.read_file(user_file)
+            self.processed_text += self.process(self.text)
         else:
             raise Exception("Invalid Input.")
 
-
-        if hasattr(self,'processed_text'):
-            print("The 10 most frequent words in this text file are: ")
-            for word in self.most_frequent_words(10):
-                print(word[0])
         
         
 
