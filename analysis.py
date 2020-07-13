@@ -8,19 +8,29 @@ from TextWriter import write_file
 import ntpath
 
 class textAnalyst():
-
+    stop_words = stopwords.words('english')
+    text_files = []
+    text = ""
+    processed_text = []
+    
     def __init__(self, user_file):
+        self.set_stopwords()
         self.append_text(user_file)
         if hasattr(self,'processed_text'):
             print("\nThe 10 most frequent words in this text file are: ")
             for word in self.most_frequent_words(10):
                 print(word[0])
         
-    stop_words = stopwords.words('english')
-    stop_words += ["like","want","know","ye","idk","i'm","really","kinda","ah","ok","oof","oh","mhm","hmm","also","lol","lmao","yeah","ooh","u"]
-    text_files = []
-    text = ""
-    processed_text = []
+    def set_stopwords(self):
+        try:
+            with open('stopwords.txt', 'r+', encoding='utf-8') as file:
+                self.stop_words += self.process(file.read())[0]
+        except:
+            writer = open("stopwords.txt","a")
+            writer.close() 
+    
+    def get_stopwords(self):
+        return self.stop_words
 
     def read_file(self,file_name):
         try:
