@@ -2,6 +2,8 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from fileNames import json_files
+import ntpath
+
 class timeAnalyzer:
     
     #Goal:
@@ -11,6 +13,7 @@ class timeAnalyzer:
         with open(json_file,encoding="utf8") as f:
             data = json.load(f)
         self.data = self.create_data(data["messages"])
+        self.text_name = ntpath.basename(json_file)
     
     def create_data(self, data):
         data_dict = []
@@ -32,6 +35,28 @@ class timeAnalyzer:
                 users[message['user']] += 1
         return users
 
+    def monthly_breakdown(self, found_year):
+        months = ["Jan","Feb","Mar","Apr","May", "Jun", "Jul", "Aug", "Sept","Oct","Nov","Dec"]
+        storage = [0]*12
+        for message in self.data:
+            if(message['year'] == found_year):
+                storage[message['month']-1] += 1
+        return dict(zip(months, storage)), "Breakdown by Month for " + str(found_year) 
+    
+    def day_breakdown(self, month):
+        months = ["Jan","Feb","Mar","Apr","May", "Jun", "Jul", "Aug", "Sept","Oct","Nov","Dec"]
+        day_dict = {}
+        for message in self.data:
+            if message['month'] == (month+1):
+                if message['day'] in day_dict.keys():
+                    day_dict[message['day']] += 1
+                else:
+                    day_dict[message['day']] = 1
+        sorted_days = sorted(day_dict)
+        sorted_resuts = [day_dict[index] for index in sorted_days]
+
+        return dict(zip(sorted_days,sorted_resuts)), "Days in " + months[month]
+    
     def season_prototype(self):
         seasons = {'winter':0, 'spring': 0, 'summer':0, 'fall':0}
         for message in self.data:
@@ -43,11 +68,14 @@ class timeAnalyzer:
                 seasons['summer'] += 1
             else:
                 seasons['fall'] += 1
-        return seasons
+        return seasons, "Seasons"
 
     def create_graph(self, data):
-        height = data.values()
-        bars = data.keys()
+        height = data[0].values()
+        bars = data[0].keys()
+        
+
+        plt.suptitle(data[1] + " from " + self.text_name)
         
         y_pos = np.arange(len(bars))
 
@@ -60,5 +88,6 @@ class timeAnalyzer:
         # Show graphic
         plt.show()
 
-ta = timeAnalyzer(json_files[1])
-ta.create_graph(ta.count_messages())
+ta = timeAnalyzer(json_files[2])
+
+ta.create_graph(ta.monthly_breakdown(2017))
