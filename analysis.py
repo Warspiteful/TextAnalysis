@@ -19,10 +19,7 @@ class textAnalyst():
     def __init__(self, user_file):
         self.set_stopwords()
         self.append_text(user_file)
-        if hasattr(self,'processed_text'):
-            print("\nThe 10 most frequent words in this text file are: ")
-            for word in self.most_frequent_words(10):
-                print(word[0])
+      
         
     def set_stopwords(self):
         try:
