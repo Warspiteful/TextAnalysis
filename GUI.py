@@ -6,7 +6,7 @@ class GUI():
     v = IntVar()
     def __init__(self):
         
-        self.root.title("Tex Analysis")
+        self.root.title("Text Analysis")
         self.reset()
         self.start()
         self.compile()
@@ -28,14 +28,23 @@ class GUI():
         self.limiter = StringVar()
         self.limiter.trace('w', self.limit_size)
         label = Label(self.frame, text = "Set Text File").pack()
-        self.EntryBox = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiter).pack()
+        self.EntryBox = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiter, )
+        self.EntryBox.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.set_path).pack()
+        print(type(self.EntryBox))
         self.compile()
 
     def set_path(self):
-        pass
+        msg = self.EntryBox.get().strip()
+        self.EntryBox.delete(0,END)
+        try:
+            self.ta = textAnalyst(msg)
+           
+        except Exception:
+            return
+       
 
     def reset(self):
         if hasattr(self,'frame'):
