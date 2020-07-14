@@ -5,6 +5,7 @@ from nltk.tokenize import PunktSentenceTokenizer
 from collections import Counter
 import gensim
 from TextWriter import write_file
+from nltk import pos_tag
 import ntpath
 
 class textAnalyst():
@@ -66,6 +67,19 @@ class textAnalyst():
         print("File not found")
 
 
+    def find_favorite_pos(self, pos):
+        
+        pos_words = []
+        all_words = [word for sentence in self.processed_text for word in sentence if word not in self.stop_words and word]
+        tagged_words = pos_tag(all_words)
+
+        for token in tagged_words:
+            if token[1].startswith(pos):
+                pos_words.append(token[0])
+
+        return Counter(pos_words).most_common(1)[0]
+      
+
     def append_text(self,user_file):
         if type(user_file) == list:
             if user_file[0][-4:] == 'json':
@@ -125,6 +139,9 @@ class textAnalyst():
     
     def print_word(self):
         print(self.text)
+
+    def print_processed(self):
+        print(self.processed_text)
 
     def return_most_similar(self, word, num):
         model = gensim.models.Word2Vec(self.processed_text, size=96, window=5, min_count=1, workers=2, sg=1)
