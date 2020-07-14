@@ -7,14 +7,10 @@ class GUI():
     def __init__(self):
         
         self.root.title("Tex Analysis")
-        self.create_frame()
+        self.reset()
         self.start()
         self.compile()
 
-
-    def create_frame(self):
-        self.frame = Frame(self.root)
-        self.frame.pack()
 
     def compile(self):
         self.root.mainloop()
@@ -28,9 +24,31 @@ class GUI():
                         command= self.send).pack(anchor=W)
 
     
+    def create_path_frame(self):
+        self.limiter = StringVar()
+        self.limiter.trace('w', self.limit_size)
+        label = Label(self.frame, text = "Set Text File").pack()
+        self.EntryBox = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiter).pack()
+        button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
+                        bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                        command= self.set_path).pack()
+        self.compile()
+
+    def set_path(self):
+        pass
+
+    def reset(self):
+        if hasattr(self,'frame'):
+            self.frame.destroy()
+        self.frame = Frame(self.root)
+        self.frame.pack()
+    
     def send(self):
-        self.frame.destroy()
-       
+        if self.v.get() > 0:
+            self.reset()
+            self.create_path_frame()
+        else:
+            return
      #   self.root = Tk()
       #  
         #self.limiter = StringVar()
