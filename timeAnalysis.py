@@ -33,7 +33,7 @@ class timeAnalyzer:
                 users[message['user']] = 1
             else:
                 users[message['user']] += 1
-        return users
+        return users, "Messages broken down by sender"
 
     def monthly_breakdown(self, found_year):
         months = ["Jan","Feb","Mar","Apr","May", "Jun", "Jul", "Aug", "Sept","Oct","Nov","Dec"]
@@ -90,4 +90,4 @@ class timeAnalyzer:
 
 ta = timeAnalyzer(json_files[2])
 
-ta.create_graph(ta.monthly_breakdown(2017))
+ta.create_graph(ta.count_messages())
