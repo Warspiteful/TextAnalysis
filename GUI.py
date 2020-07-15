@@ -81,13 +81,38 @@ class GUI():
     
     def json_user_select(self, json_path):
         self.reset()
-        users = gf.get_users(json_path)
-        print(users[0])
-        button1 = Radiobutton(self.frame, text=users[0], variable=self.v, value=1)
+        self.json = json_path
+        self.users = gf.get_users(json_path)
+        
+        limit = StringVar()
+        limit.trace('w', self.limit_size) 
+        self.limiters = [limit]
+        label1 = Label(self.frame, text = "Choose User to Pull Data From").pack()
+        button1 = Radiobutton(self.frame, text=self.users[0], variable=self.v, value=1)
         button1.pack(anchor=W)
-        button2 = Radiobutton(self.frame, text=users[1], variable=self.v, value=2)
+        button2 = Radiobutton(self.frame, text=self.users[1], variable=self.v, value=2)
         button2.pack(anchor=W)
+        label2 = Label(self.frame, text = "(Optional) Set text file path ").pack()
+        self.text_path = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], borderwidth=5 )
+        self.text_path.pack()
+        button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
+                        bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                        command= self.set_user).pack(anchor=W)
         self.compile()
+
+    def set_user(self):
+        if self.v.get() > 0:
+            msg = self.text_path.get().strip()
+            if msg[-3:] != ".txt":
+                msg += ".txt"
+            self.text_path.delete(0,END)
+            self.ta = gf.textAnalyst([self.json, self.users[self.v.get()-1], msg])
+            self.root.geometry("500x500")
+            self.reset()
+            self.create_main_screen()
+
+
+
 
     def create_main_screen(self):
       

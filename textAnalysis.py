@@ -90,12 +90,13 @@ class textAnalyst():
                     raise NameError('User Missing. Please try again') from None
                     sys.exit()
                 try:
+                    if user_file[2] == '': user_file[2] = 'default.txt'
                     print("Writing text to and reading text from \'" + ntpath.basename(user_file[2]) + "\'")
                 except Exception:
                     print("No text file path provided. Created \'default.txt\' in local directory.")
                     if len(user_file) < 3:
                         user_file.append('')
-                    user_file[2] = ( 'default.txt')
+                    user_file[2] = 'default.txt'
                 self.write_file(user_file[0],user_file[1],user_file[2])
                 self.text += self.read_file(user_file[2])
                 self.processed_text += self.process(self.text)
@@ -146,7 +147,11 @@ class textAnalyst():
         return model.most_similar(word,topn = num)
 
     def write_file(self, file_path, name, text_path):
-        writer = open(text_path,"a") 
+        try:
+            writer = open(text_path,"w")
+        except Exception:
+            writer = open('default.txt',"w")
+
         with open(file_path,encoding="utf8") as f:
             data = json.load(f)
 
