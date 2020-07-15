@@ -2,8 +2,12 @@
 Text Analysis Program designed for Telegram-exported JSON files
 
 ## Files
+
 `TextWriter.py` - Contains the `write_file()` command, which reads JSON files and writes the contents to a .txt file \
-`analysis.py` - Contains the textAnalyst class, detailed below
+`analysis.py` - Contains the [textAnalyst class](#text-analyst-class) \
+`timeAnalysis.py` - Contains the [timeAnalyst class](#time-analysis-class)\
+`GUI.py` - Contains the [GUI class](#gui-class) \
+`stopwords.txt` - contains custom stopwords read through textAnalyst [functions](#stopword-handling) 
 
 ## Text Analyst Class
 Reads contents of a text file and returns patterns using `Counter` and `gensim` libraries
@@ -28,16 +32,20 @@ ta_json = textAnalyst(['text.json','user',"text_file.txt"]) #Writes all text fro
 ```
 
 ### Functions
-
+#### Data Handling
 * `read_file(file_name)` Opens and appends the text from a .txt file into the model 
 * `remove_text_file(file_name)` Removes file_name from the model data and refreshes text data
+* `set_text(user_file)` Sets the instance's text data to provided user file
+
+#### Text Analysis
 * `most_frequent_words(n)` Returns the n most common words in the text 
 * `return_most_similar(word, num)` Returns n words most similar to the provided word based on the provided text
-* `set_text(user_file)` Sets the instance's text data to provided user file
-* `print_word()` Prints out current text data
+* `find_favorite_pos(pos)` Returns the most used word associated with the given part-of-speech
+
+#### Stopword Handling
 * `set_stopwords()` Creates, if it does not exist, and reads custom stopwords from 'stopwords.txt'.
 * `get_stopwords()` Returns all stopwords in the model
-* `find_favorite_pos(pos)` Returns the most used word associated with the given part-of-speech
+
 
 ## Time Analysis Class
 Reads contents of JSON files and creates graphs based on statistics
@@ -59,12 +67,16 @@ ta_example = timeAnalyst('example.json') #Reads from a JSON file
 
 ### Functions
 
+#### Data Handling
 * `create_data(data)` Creates the data set from which the rest of the functions pull from (user, year, month, day)
+* `create_graph(data)` Creates a bar graph to visualize data returned by data analysis functions
+
+#### Data Analysis
 * `count_messsages()` Returns dict of users to number of messages they sent
 * `monthly_breakdown(found_year)` Returns the a dict of months to messages sent during that period for given year `found_year`
 * `day_breakdown(month)` Returns a dict of days to messages sent on that given day for given month `month`
 * `season_breakdown()` Returns a dict of seasons to messages sent in that given season
-* `create_graph(data)` Creates a bar graph to visualize data returned by above functions
+
 
 
 ## GUI Class
