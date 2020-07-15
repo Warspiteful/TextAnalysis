@@ -1,6 +1,6 @@
 from tkinter import *
 import guiFunctions as gf
-import re
+import re, ntpath
 class GUI():
 
     root = Tk()
@@ -35,7 +35,7 @@ class GUI():
             if len(value) > 20: limiter.set(value[:20])
    
     def create_path_frame(self, selection):
-       
+        
         self.EntryBoxes = []
         self.limiters = []
         if selection == 1:
@@ -67,11 +67,14 @@ class GUI():
 
     def set_path(self):
         msg = []
+        self.files = []
         for box in self.EntryBoxes:
             if box.get().strip()[-4:] == ".txt":
                 msg.append(box.get().strip()) 
             box.delete(0,END)
         try:
+            for file in msg:
+                self.files.append(ntpath.basename(file))
             if msg[0][-4:] == 'json':
                 self.json_user_select("".join(msg))
             self.ta = gf.textAnalyst(msg)
@@ -119,35 +122,58 @@ class GUI():
         
         pos = {"NN":"Noun","VB":"Verb","JJ":"Adjective"}
         pos_word = []
-        for num, tag in enumerate(pos.keys()):
-            label =  Label(self.frame,text = pos[tag], padx = 20).grid(row = 0, column = num)
+        num = 0
+        for tag in pos.keys():
+            label =  Label(self.frame,text = pos[tag], padx = 20).grid(row = 0, column = num, columnspan = 2)
             word = Text(self.frame, width = 10, height = 1, padx = 20, state = NORMAL)
-            word.grid(row = 1, column = num)
+            word.grid(row = 1, column = num, columnspan = 2)
+            num += 2
             word.insert(END, self.ta.find_favorite_pos(tag)[0])
             word.config(state=DISABLED)
 
         vcmd = (self.root.register(self.digit_locker))
         self.common_words_display = Text(self.frame, bd=0, bg="white", height="10", width="10", font="Arial")
         self.common_words_display.grid(row = 5, column = 0, rowspan = 10,  padx=10)
-        label = Label(self.frame,text = "Common Terms").grid(row = 2, column = 0)
+        label = Label(self.frame,text = "Common Terms").grid(row = 2, column = 0, columnspan = 2)
         self.common_words_entry = Entry(self.frame, bd=0, bg="white", width="10", font="Arial", validate = "all", validatecommand = (vcmd,'%P'))
-        self.common_words_entry.grid(row = 3, column = 0)
+        self.common_words_entry.grid(row = 3, column = 0, columnspan = 2)
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="8", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
-                        command= self.most_common).grid(row = 4, column = 0)
+                        command= self.most_common).grid(row = 4, column = 0, columnspan = 2)
         self.common_words_display.config(state = DISABLED)
-     
 
+        label = Label(self.frame, text = "Files in Model").grid(row = 2, column = 2, columnspan = 2)
+        text_files_display = Text(self.frame, width = 10, height = 5, state = NORMAL)
+        text_files_display.grid(row = 3, column = 2, rowspan = 3, columnspan = 2)
+        for file in self.files:
+            text_files_display.insert(END,file + "\n")
+        text_files_display.config(state = NORMAL)
 
-          
-        
-       
-
-        
-        
-    
+        similar_word_label = Label(self.frame, text ="Word").grid(row = 2, column = 4)
+        similar_word_num_label = Label(self.frame, text ="# Of Similar").grid(row = 2, column = 5)
+        self.similar_word_entry = Entry(self.frame, width = 10)
+        self.similar_word_entry.grid(row = 3, column = 4)
+        self.similar_word_num_entry = Entry(self.frame, width = 2, validate = "all", validatecommand = (vcmd,'%P'))
+        self.similar_word_num_entry.grid(row = 3, column = 5)
+        button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
+                        bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                        command= self.find_similar).grid(row = 4, column = 4, columnspan = 2)
+        self.similar_word_display = Text(self.frame, bd=0, bg="white", height="10", width="15", font="Arial")
+        self.similar_word_display.grid(row = 5, column = 4, rowspan = 10, columnspan = 2,)
+        self.similar_word_display.config(state = DISABLED)
         self.compile()
 
+    def find_similar(self):
+        self.similar_word_display.config(state = NORMAL)
+        self.similar_word_display.delete('1.0', END)
+        print(self.similar_word_num_entry.get())
+        print(self.similar_word_entry.get())
+        if int(self.similar_word_num_entry.get()) > 0 and self.similar_word_entry.get() != '':
+            words = self.ta.return_most_similar(self.similar_word_entry.get(),int(self.similar_word_num_entry.get()))
+            for num, word in enumerate(words):
+                self.similar_word_display.insert(END, str(num + 1) + ". " + word[0] + "\n")
+        self.similar_word_display.config(state = DISABLED)
+        
     def digit_locker(self, P):
         if str.isdigit(P) or P == '':
             return True
