@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import guiFunctions as gf
 import re, ntpath
 class GUI():
@@ -8,6 +9,7 @@ class GUI():
 
     def __init__(self):    
         self.root.title("Text Analysis")
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.reset()
         self.start()
         self.compile()
@@ -16,9 +18,8 @@ class GUI():
         self.root.mainloop()
 
     def start(self):
-        button1 = Radiobutton(self.frame, text="Text", variable=self.v, value=1).pack(anchor=W)
-        button2 = Radiobutton(self.frame, text="Multi-Text", variable=self.v, value=2).pack(anchor=W)
-        button3 = Radiobutton(self.frame, text="JSON", variable=self.v, value=3).pack(anchor=W)
+        button1 = Radiobutton(self.frame, text="Single File (.txt,.json)", variable=self.v, value=1).pack(anchor=W)
+        button2 = Radiobutton(self.frame, text="Multi-File (.txt)", variable=self.v, value=2).pack(anchor=W)
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.send).pack(anchor=W)
@@ -27,6 +28,7 @@ class GUI():
             self.reset()
             self.create_path_frame(self.v.get())
         else:
+            messagebox.showerror("Error", "Select an option")
             return
  
     def limit_size(self, *args):
@@ -39,24 +41,18 @@ class GUI():
         self.EntryBoxes = []
         self.limiters = []
         if selection == 1:
-            label = Label(self.frame, text = "Set Text File Path").pack()
+            label = Label(self.frame, text = "Set .txt/.json File Path").pack()
             limit = StringVar()
             limit.trace('w', self.limit_size)    
             self.limiters.append(limit)
             self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], ))
         elif selection == 2:
-            label = Label(self.frame, text = "Set Text File Paths").pack()
+            label = Label(self.frame, text = "Set File Paths").pack()
             for i in range(3):
                 limit = StringVar()
                 limit.trace('w', self.limit_size)    
                 self.limiters.append(limit)
                 self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[i], borderwidth=5 ))
-        elif selection == 3:
-                label = Label(self.frame, text = "Set JSON file Path").pack()
-                limit = StringVar()
-                limit.trace('w', self.limit_size)    
-                self.limiters.append(limit)
-                self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], borderwidth=5 ))
         for box in self.EntryBoxes:
             box.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
@@ -64,6 +60,10 @@ class GUI():
                         command= self.set_path).pack()
 
         self.compile()
+
+    def on_closing(self):
+        if messagebox.askyesnocancel("Quit", "Do you want to quit?"):
+            self.root.destroy()
 
     def set_path(self):
         msg = []
@@ -75,14 +75,16 @@ class GUI():
         try:
             for file in msg:
                 self.files.append(ntpath.basename(file))
-            if msg[0][-4:] == 'json':
-               
+            if msg[0][-4:] == 'json' and len(msg) < 1:
                 self.json_user_select("".join(msg))
+            else:
+                raise Exception
             self.ta = gf.textAnalyst(msg)
             self.root.geometry("")
             self.reset()
             self.create_main_screen()
         except Exception:
+            messagebox.showerror("Error", "Can not parse provided file path")
             return
     
     def json_user_select(self, json_path):
@@ -115,9 +117,6 @@ class GUI():
             self.ta = gf.textAnalyst([self.json, self.users[self.v.get()-1], msg])
             self.reset()
             self.create_main_screen()
-
-
-
 
     def create_main_screen(self):
         
@@ -167,12 +166,21 @@ class GUI():
     def find_similar(self):
         self.similar_word_display.config(state = NORMAL)
         self.similar_word_display.delete('1.0', END)
-     
-        if int(self.similar_word_num_entry.get()) > 0 and self.similar_word_entry.get() != '':
-            words = self.ta.return_most_similar(self.similar_word_entry.get(),int(self.similar_word_num_entry.get()))
-            for num, word in enumerate(words):
-                self.similar_word_display.insert(END, str(num + 1) + ". " + word[0] + "\n")
-        self.similar_word_display.config(state = DISABLED)
+        if self.similar_word_entry.get() == '':
+            messagebox.showerror("Error", "Cannot search for empty word")
+            return
+        elif self.similar_word_num_entry.get() == '':
+            messagebox.showerror("Error", "Cannot display 0 terms")
+            return
+        try:
+            if int(self.similar_word_num_entry.get()) > 0 and self.similar_word_entry.get() != '':
+                words = self.ta.return_most_similar(self.similar_word_entry.get(),int(self.similar_word_num_entry.get()))
+                for num, word in enumerate(words):
+                    self.similar_word_display.insert(END, str(num + 1) + ". " + word[0] + "\n")
+            self.similar_word_display.config(state = DISABLED)
+        except Exception:
+            messagebox.showerror("Error", "Word Not Present in Vocabulary")
+            return
         
     def digit_locker(self, P):
         if str.isdigit(P) or P == '':
@@ -183,10 +191,13 @@ class GUI():
     def most_common(self):
         self.common_words_display.config(state = NORMAL)
         self.common_words_display.delete('1.0', END)
-        if int(self.common_words_entry.get()) > 0:
-            words = self.ta.most_frequent_words(int(self.common_words_entry.get()))
-            for num, word in enumerate(words):
-                self.common_words_display.insert(END, str(num + 1) + ". " + word[0] + "\n")
+        try:
+            if int(self.common_words_entry.get()) > 0:
+                words = self.ta.most_frequent_words(int(self.common_words_entry.get()))
+                for num, word in enumerate(words):
+                    self.common_words_display.insert(END, str(num + 1) + ". " + word[0] + "\n")
+        except:
+            messagebox.showerror("Error", "Cannot display 0 terms")
         self.common_words_display.config(state = DISABLED)
 
     def reset(self):
