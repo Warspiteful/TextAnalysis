@@ -69,13 +69,14 @@ class GUI():
         msg = []
         self.files = []
         for box in self.EntryBoxes:
-            if box.get().strip()[-4:] == ".txt":
+            if box.get().strip()[-4:] != "":
                 msg.append(box.get().strip()) 
             box.delete(0,END)
         try:
             for file in msg:
                 self.files.append(ntpath.basename(file))
             if msg[0][-4:] == 'json':
+               
                 self.json_user_select("".join(msg))
             self.ta = gf.textAnalyst(msg)
             self.root.geometry("")
@@ -108,7 +109,7 @@ class GUI():
     def set_user(self):
         if self.v.get() > 0:
             msg = self.text_path.get().strip()
-            if msg[-3:] != ".txt":
+            if msg[-3:] != ".txt" and msg[-3:] != "":
                 msg += ".txt"
             self.text_path.delete(0,END)
             self.ta = gf.textAnalyst([self.json, self.users[self.v.get()-1], msg])
@@ -166,8 +167,7 @@ class GUI():
     def find_similar(self):
         self.similar_word_display.config(state = NORMAL)
         self.similar_word_display.delete('1.0', END)
-        print(self.similar_word_num_entry.get())
-        print(self.similar_word_entry.get())
+     
         if int(self.similar_word_num_entry.get()) > 0 and self.similar_word_entry.get() != '':
             words = self.ta.return_most_similar(self.similar_word_entry.get(),int(self.similar_word_num_entry.get()))
             for num, word in enumerate(words):
