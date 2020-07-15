@@ -1,5 +1,6 @@
 from tkinter import *
 from analysis import textAnalyst
+import re
 class GUI():
 
     root = Tk()
@@ -41,6 +42,7 @@ class GUI():
         self.EntryBox.delete(0,END)
         try:
             self.ta = textAnalyst(msg)
+            self.root.geometry("500x500")
             self.reset()
             self.create_main_screen()
         except Exception:
@@ -48,15 +50,33 @@ class GUI():
        
 
     def create_main_screen(self):
-        
-        self.common_words_display = Text(self.frame, bd=0, bg="white", height="25", width="5", font="Arial").grid(row = 0, column =0,  padx=10, pady=5)
-        self.common_words_entry = Entry(self.frame, bd=0, bg="white", height="1", width="10", font="Arial").grid(row = 0, column =1)
+        self.digit_lock = StringVar()
+        self.digit_lock.trace('w', self.digit_locker)
+        print("Hello")
+        self.common_words_display = Text(self.frame, bd=0, bg="white", height="25", width="20", font="Arial")
+        self.common_words_display.grid(row = 0, column = 0, rowspan = 25,  padx=10)
+        label = Label(self.frame,text = "Common Terms").grid(row = 0, column = 1)
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
-                        command= self.set_path).grid(row = 1, column =1)
-        self.root.geometry(("500x500"))
-        self.compile()
+                        command= self.most_common).grid(row = 2, column = 1)
+        self.common_words_entry = Entry(self.frame, bd=0, bg="white", width="10", font="Arial", textvariable = self.digit_lock)
+        self.common_words_entry.grid(row = 1, column = 1)
         
+        
+    
+        self.compile()
+
+    def digit_locker(self, *args):
+        value = self.digit_lock.get()
+        re.sub(r'^[\d]+',"", value)
+
+    def most_common(self):
+        self.common_words_display.delete('1.0', END)
+        if int(self.common_words_entry.get()) > 0:
+            words = self.ta.most_frequent_words(int(self.common_words_entry.get()))
+            for num, word in enumerate(words):
+                self.common_words_display.insert(END, str(num + 1) + ". " + word[0] + "\n")
+
     def reset(self):
         if hasattr(self,'frame'):
             self.frame.destroy()

@@ -7,6 +7,8 @@ import gensim
 from TextWriter import write_file
 from nltk import pos_tag
 import ntpath
+import string
+import re
 
 class textAnalyst():
     stop_words = stopwords.words('english')
@@ -22,6 +24,7 @@ class textAnalyst():
       
         
     def set_stopwords(self):
+        self.stop_words += ['']
         try:
             with open('stopwords.txt', 'r+', encoding='utf-8') as file:
                 self.stop_words += self.process(file.read())[0]
@@ -121,11 +124,12 @@ class textAnalyst():
         
 
     def process(self,text):
+        
         sentence_tokenizer = PunktSentenceTokenizer()
         sentence_tokenized_speech = sentence_tokenizer.tokenize(text)
         word_tokenized_sentences = list()
         for sentence in sentence_tokenized_speech:
-            word_tokenized_sentence = [word.lower().strip('.').strip('?').strip('!') for word in sentence.replace(",","").replace("-"," ").replace(":","").replace("~","").split()]
+            word_tokenized_sentence = [word.lower().strip('.').strip('?').strip('!').strip(string.digits) for word in sentence.replace(",","").replace("-"," ").replace(":","").replace("~","").replace("(", "").replace(")", "").split()]
             word_tokenized_sentences.append(word_tokenized_sentence)
         return word_tokenized_sentences
 
