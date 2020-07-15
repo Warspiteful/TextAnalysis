@@ -29,12 +29,53 @@ ta_json = textAnalyst(['text.json','user',"text_file.txt"]) #Writes all text fro
 
 ### Functions
 
+* `read_file(file_name)` Opens and appends the text from a .txt file into the model 
+* `remove_text_file(file_name)` Removes file_name from the model data and refreshes text data
 * `most_frequent_words(n)` Returns the n most common words in the text 
 * `return_most_similar(word, num)` Returns n words most similar to the provided word based on the provided text
 * `set_text(user_file)` Sets the instance's text data to provided user file
 * `print_word()` Prints out current text data
+* `set_stopwords()` Creates, if it does not exist, and reads custom stopwords from 'stopwords.txt'.
+* `get_stopwords()` Returns all stopwords in the model
+* `find_favorite_pos(pos)` Returns the most used word associated with the given part-of-speech
+
+## Time Analysis Class
+Reads contents of JSON files and creates graphs based on statistics
+
+### Constructor 
+```python
+timeAnalyst(json_file)
+```
+
+#### User File
+User file is exclusively a path to a JSON file
+
+#### Usage
+```python
+from timeanalysis import timeAnalyst
+
+ta_example = timeAnalyst('example.json') #Reads from a JSON file
+```
+
+### Functions
+
+* `create_data(data)` Creates the data set from which the rest of the functions pull from (user, year, month, day)
+* `count_messsages()` Returns dict of users to number of messages they sent
+* `monthly_breakdown(found_year)` Returns the a dict of months to messages sent during that period for given year `found_year`
+* `day_breakdown(month)` Returns a dict of days to messages sent on that given day for given month `month`
+* `season_breakdown()` Returns a dict of seasons to messages sent in that given season
+* `create_graph(data)` Creates a bar graph to visualize data returned by above functions
 
 
+## GUI Class
+Created to handle both Time Analyzer and Text Analyzer in a user-friendly and accessible Guided User Interface
+
+### Constructor
+```python
+from GUI import GUI
+
+GUI_example = GUI()
+```
 ## Exporting From Telegram
 From a chat, click on the three vertical dots in the upper right-hand corner. This will drop down a menu. \
 ![Image of Menu](https://i.imgur.com/QffDE6D.png) \
@@ -49,3 +90,5 @@ Upon successful export, you will be prompted to press 'Show My Data' as seen bel
 This will pull up result.json file. Provide the path, including the 'result.json' to user_file along with the user and path to text file. \
 ![JSon File Location](https://i.imgur.com/KWISjOT.png)
 
+## Release History
+* 0.1.0 - Minimum Viable Product: TextAnalyzer Class 
