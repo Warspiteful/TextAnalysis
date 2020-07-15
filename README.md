@@ -3,11 +3,10 @@ Text Analysis Program designed for Telegram-exported JSON files
 
 ## Files
 
-`TextWriter.py` - Contains the `write_file()` command, which reads JSON files and writes the contents to a .txt file \
-`analysis.py` - Contains the [textAnalyst class](#text-analyst-class) \
-`timeAnalysis.py` - Contains the [timeAnalyst class](#time-analysis-class)\
+`textAnalysis.py` - Contains the [textAnalyst class](#text-analyst-class) \
+`timeAnalysis.py` - Contains the [timeAnalyst class](#time-analyst-class)\
 `GUI.py` - Contains the [GUI class](#gui-class) \
-`stopwords.txt` - contains custom stopwords read through textAnalyst [functions](#stopword-handling) 
+`stopwords.txt` - contains custom stopwords read through [textAnalyst functions](#stopword-handling) 
 
 ## Text Analyst Class
 Reads contents of a text file and returns patterns using `Counter` and `gensim` libraries
@@ -33,9 +32,12 @@ ta_json = textAnalyst(['text.json','user',"text_file.txt"]) #Writes all text fro
 
 ### Functions
 #### Data Handling
-* `read_file(file_name)` Opens and appends the text from a .txt file into the model 
+* `write_file(file_path, name, text_path)` Reads a JSON file and writes all text from user `name` to .txt file
+* `read_file(file_name)` Opens and returns the text from a .txt file 
+* `process(text)` Cleans and breaks up text into tokens 
+* `append_text(user_file)` Parses file input and appends text data to model 
 * `remove_text_file(file_name)` Removes file_name from the model data and refreshes text data
-* `set_text(user_file)` Sets the instance's text data to provided user file
+
 
 #### Text Analysis
 * `most_frequent_words(n)` Returns the n most common words in the text 
@@ -46,8 +48,12 @@ ta_json = textAnalyst(['text.json','user',"text_file.txt"]) #Writes all text fro
 * `set_stopwords()` Creates, if it does not exist, and reads custom stopwords from 'stopwords.txt'.
 * `get_stopwords()` Returns all stopwords in the model
 
+### Printing Functions
+* `print_text_files()` Prints all text files currently in model data 
+* `print_word()` Prints text data
+* `print_processed()` Prints all tokenized text data
 
-## Time Analysis Class
+## Time Analyst Class
 Reads contents of JSON files and creates graphs based on statistics
 
 ### Constructor 
