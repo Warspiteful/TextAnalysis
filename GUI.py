@@ -50,25 +50,26 @@ class GUI():
        
 
     def create_main_screen(self):
-        self.digit_lock = StringVar()
-        self.digit_lock.trace('w', self.digit_locker)
-        print("Hello")
+      
+        vcmd = (self.root.register(self.digit_locker))
         self.common_words_display = Text(self.frame, bd=0, bg="white", height="25", width="20", font="Arial")
         self.common_words_display.grid(row = 0, column = 0, rowspan = 25,  padx=10)
         label = Label(self.frame,text = "Common Terms").grid(row = 0, column = 1)
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.most_common).grid(row = 2, column = 1)
-        self.common_words_entry = Entry(self.frame, bd=0, bg="white", width="10", font="Arial", textvariable = self.digit_lock)
+        self.common_words_entry = Entry(self.frame, bd=0, bg="white", width="10", font="Arial", validate = "all", validatecommand = (vcmd,'%P'))
         self.common_words_entry.grid(row = 1, column = 1)
         
         
     
         self.compile()
 
-    def digit_locker(self, *args):
-        value = self.digit_lock.get()
-        re.sub(r'^[\d]+',"", value)
+    def digit_locker(self, P):
+        if str.isdigit(P):
+            return True
+        else:
+            return False
 
     def most_common(self):
         self.common_words_display.delete('1.0', END)
