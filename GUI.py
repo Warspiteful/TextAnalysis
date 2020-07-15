@@ -1,17 +1,16 @@
 from tkinter import *
-from analysis import textAnalyst
+import guiFunctions as gf
 import re
 class GUI():
 
     root = Tk()
     v = IntVar()
-    def __init__(self):
-        
+
+    def __init__(self):    
         self.root.title("Text Analysis")
         self.reset()
         self.start()
         self.compile()
-
 
     def compile(self):
         self.root.mainloop()
@@ -23,31 +22,72 @@ class GUI():
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.send).pack(anchor=W)
-
-    
-    def create_path_frame(self):
-        self.limiter = StringVar()
-        self.limiter.trace('w', self.limit_size)
-        label = Label(self.frame, text = "Set Text File").pack()
-        self.EntryBox = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiter, )
-        self.EntryBox.pack()
+    def send(self):
+        if self.v.get() > 0:
+            self.reset()
+            self.create_path_frame(self.v.get())
+        else:
+            return
+ 
+    def limit_size(self, *args):
+        for limiter in self.limiters:
+            value = limiter.get()
+            if len(value) > 20: limiter.set(value[:20])
+   
+    def create_path_frame(self, selection):
+       
+        self.EntryBoxes = []
+        self.limiters = []
+        if selection == 1:
+            label = Label(self.frame, text = "Set Text File Path").pack()
+            limit = StringVar()
+            limit.trace('w', self.limit_size)    
+            self.limiters.append(limit)
+            self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], ))
+        elif selection == 2:
+            label = Label(self.frame, text = "Set Text File Paths").pack()
+            for i in range(3):
+                limit = StringVar()
+                limit.trace('w', self.limit_size)    
+                self.limiters.append(limit)
+                self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[i], borderwidth=5 ))
+        elif selection == 3:
+                label = Label(self.frame, text = "Set JSON file Path").pack()
+                limit = StringVar()
+                limit.trace('w', self.limit_size)    
+                self.limiters.append(limit)
+                self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], borderwidth=5 ))
+        for box in self.EntryBoxes:
+            box.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.set_path).pack()
-    
+
         self.compile()
 
     def set_path(self):
-        msg = self.EntryBox.get().strip()
-        self.EntryBox.delete(0,END)
+        for box in self.EntryBoxes:
+            msg = [box.get().strip()] 
+            box.delete(0,END)
         try:
-            self.ta = textAnalyst(msg)
+            if msg[0][-4:] == 'json':
+                self.json_user_select("".join(msg))
+            self.ta = gf.textAnalyst(msg)
             self.root.geometry("500x500")
             self.reset()
             self.create_main_screen()
         except Exception:
             return
-       
+    
+    def json_user_select(self, json_path):
+        self.reset()
+        users = gf.get_users(json_path)
+        print(users[0])
+        button1 = Radiobutton(self.frame, text=users[0], variable=self.v, value=1)
+        button1.pack(anchor=W)
+        button2 = Radiobutton(self.frame, text=users[1], variable=self.v, value=2)
+        button2.pack(anchor=W)
+        self.compile()
 
     def create_main_screen(self):
       
@@ -84,25 +124,5 @@ class GUI():
         self.frame = Frame(self.root)
         self.frame.pack()
     
-    def send(self):
-        if self.v.get() > 0:
-            self.reset()
-            self.create_path_frame()
-        else:
-            return
-     #   self.root = Tk()
-      #  
-        #self.limiter = StringVar()
-        #self.limiter.trace('w', self.limit_size)
-        #self.root.resizable(width=FALSE, height=FALSE)
-        #self.label = Label(self.root, text = "Set Text File")
-        #self.EntryBox = Entry(self.root, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiter)
-        #self.EntryBox.place(x="125",y="50")
-        #self.root.mainloop()
-    
-    def limit_size(self, *args):
-        value = self.limiter.get()
-        if len(value) > 20: self.limiter.set(value[:20])
-
-
+   
 GUI()

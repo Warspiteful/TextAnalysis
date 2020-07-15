@@ -87,7 +87,3 @@ class timeAnalyst:
     
         # Show graphic
         plt.show()
-
-ta = timeAnalyzer(json_files[2])
-
-ta.create_graph(ta.count_messages())
