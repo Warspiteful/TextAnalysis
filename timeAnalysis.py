@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from fileNames import json_files
 import ntpath
 
-class timeAnalyzer:
+class timeAnalyst:
     
     #Goal:
     #Dictionary of Messages:
@@ -57,7 +57,7 @@ class timeAnalyzer:
 
         return dict(zip(sorted_days,sorted_resuts)), "Days in " + months[month]
     
-    def season_prototype(self):
+    def season_breakdown(self):
         seasons = {'winter':0, 'spring': 0, 'summer':0, 'fall':0}
         for message in self.data:
             if message['month'] == 12 or message['month'] <= 2:
