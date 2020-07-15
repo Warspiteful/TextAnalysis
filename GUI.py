@@ -66,8 +66,10 @@ class GUI():
         self.compile()
 
     def set_path(self):
+        msg = []
         for box in self.EntryBoxes:
-            msg = [box.get().strip()] 
+            if box.get().strip()[-4:] == ".txt":
+                msg.append(box.get().strip()) 
             box.delete(0,END)
         try:
             if msg[0][-4:] == 'json':
