@@ -2,20 +2,17 @@ from tkinter import *
 from tkinter import messagebox
 import guiFunctions as gf
 import re, ntpath
-class Text_Analyst_GUI():
+from MainGUI import GUI
 
-    root = Tk()
-    v = IntVar()
+class Text_Analyst_GUI(GUI):
+
 
     def __init__(self):    
         self.root.title("Text Analysis")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-     
         self.start()
         self.compile()
 
-    def compile(self):
-        self.root.mainloop()
 
     def start(self):
         self.reset()
@@ -30,11 +27,6 @@ class Text_Analyst_GUI():
         else:
             messagebox.showerror("Error", "Select an option")
             return
- 
-    def limit_size(self, *args):
-        for limiter in self.limiters:
-            value = limiter.get()
-            if len(value) > 20: limiter.set(value[:20])
    
     def create_path_frame(self, selection):
         self.reset()
@@ -60,11 +52,6 @@ class Text_Analyst_GUI():
                         command= self.set_path).pack()
 
         self.compile()
-
-    def on_closing(self):
-        if messagebox.askyesnocancel("Quit", "Do you want to quit?"):
-            self.frame.destroy()
-            self.root.destroy()
 
     def set_path(self):
         msg = []
@@ -205,11 +192,5 @@ class Text_Analyst_GUI():
         except:
             messagebox.showerror("Error", "Cannot display 0 terms")
         self.common_words_display.config(state = DISABLED)
-
-    def reset(self):
-        if hasattr(self,'frame'):
-            self.frame.destroy()
-        self.frame = Frame(self.root)
-        self.frame.pack()
     
 Text_Analyst_GUI()
