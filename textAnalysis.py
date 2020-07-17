@@ -47,6 +47,7 @@ class textAnalyst():
         print("\nIncluded in this model:")
         for file in self.text_files:
             print(ntpath.basename(file))
+    
 
     def remove_text_file(self,file_name):
         

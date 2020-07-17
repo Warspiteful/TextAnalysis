@@ -61,8 +61,7 @@ class TextAnalysisGUI(GUI):
             box.delete(0,END)
         try:
          
-            for file in msg:
-                self.files.append(ntpath.basename(file))
+    
             if msg[0][-4:] == 'json':
               
                 if len(msg) < 2: 
@@ -136,13 +135,17 @@ class TextAnalysisGUI(GUI):
         label = Label(self.frame, text = "Files in Model").grid(row = 2, column = 2, columnspan = 2)
         text_files_display = Text(self.frame, width = 10, height = 5, state = NORMAL)
         text_files_display.grid(row = 3, column = 2, rowspan = 3, columnspan = 2)
-        for file in self.files:
-            text_files_display.insert(END,file + "\n")
+        for file in self.ta.text_files:
+            text_files_display.insert(END,ntpath.basename(file) + "\n")
         text_files_display.config(state = NORMAL)
 
         main_screen = Button(self.frame, font=("Verdana",12,'bold'), text="Return", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.start).grid(row = 7, column = 2, columnspan = 2)
+
+        add_text = Button(self.frame, font=("Verdana",12,'bold'), text="Add Text", width="12", height=1,
+                    bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                    command= self.add_text_screen).grid(row = 6, column = 2, columnspan = 2)
 
         similar_word_label = Label(self.frame, text ="Word").grid(row = 2, column = 4)
         similar_word_num_label = Label(self.frame, text ="# Of Similar").grid(row = 2, column = 5)
@@ -193,4 +196,23 @@ class TextAnalysisGUI(GUI):
         except:
             messagebox.showerror("Error", "Cannot display 0 terms")
         self.common_words_display.config(state = DISABLED)
-    
+
+    def add_text_screen(self):
+        self.reset()
+        label = Label(self.frame, text = "Set .txt/.json File Path").pack()
+        self.addition = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", )
+        self.addition.pack()
+        button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
+                        bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                        command= self.add_text).pack()
+        button1 = Button(self.frame, font=("Verdana",12,'bold'), text="Back", width="12", height=1,
+                    bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                    command= self.create_main_screen).pack()
+        self.compile()
+
+    def add_text(self):
+        try:
+            self.ta.append_text(self.addition.get().strip())
+            self.create_main_screen()
+        except:
+            messagebox.showerror("Error", "Can not parse provided file path")
