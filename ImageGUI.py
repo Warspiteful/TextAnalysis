@@ -2,29 +2,17 @@ from tkinter import *
 from tkinter import messagebox
 import guiFunctions as gf
 import re, ntpath
+from MainGUI import GUI
 
 
-class TimeGUI():
-    root = Tk()
-    v = IntVar()
-    s = StringVar()
+class TimeGUI(GUI):
 
-    def __init__(self):    
+    def __init__(self):  
+        super().__init__()
         self.root.title("Statistics Analysis")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-       
         self.start()
         self.compile()
-    
-    
-    def compile(self):
-        self.root.mainloop()
-
-    def reset(self):
-        if hasattr(self,'frame'):
-            self.frame.destroy()
-        self.frame = Frame(self.root)
-        self.frame.pack()
 
     def start(self):
         self.reset()
@@ -37,9 +25,6 @@ class TimeGUI():
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.set_path).pack()
 
-    def limit_size(self, *args):
-        value = self.limit.get()
-        if len(value) > 20: self.limit.set(value[:20])
         
     def set_path(self):
         self.files = []
@@ -111,8 +96,6 @@ class TimeGUI():
             messagebox.showerror("Error", "Please select a month")
             return
 
-    def on_closing(self):
-        if messagebox.askyesnocancel("Quit", "Do you want to quit?"):
-            self.root.destroy()
+   
 
 TimeGUI()
