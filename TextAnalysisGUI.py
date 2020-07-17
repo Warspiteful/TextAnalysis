@@ -1,13 +1,13 @@
 from tkinter import *
 from tkinter import messagebox
-import guiFunctions as gf
 import re, ntpath
 from MainGUI import GUI
 
 class Text_Analyst_GUI(GUI):
 
 
-    def __init__(self):    
+    def __init__(self):
+        print("Weird")    
         self.root.title("Text Analysis")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.start()
@@ -193,4 +193,3 @@ class Text_Analyst_GUI(GUI):
             messagebox.showerror("Error", "Cannot display 0 terms")
         self.common_words_display.config(state = DISABLED)
     
-Text_Analyst_GUI()

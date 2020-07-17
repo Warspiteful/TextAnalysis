@@ -8,13 +8,9 @@ class GUI():
     root = Tk()
     v = IntVar()
     s = StringVar()
-
     def __init__(self):
-        self.root.title("Telegram Analysis")
-        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.start()
-        self.compile()
-
+        pass
+    
     def compile(self):
         self.root.iconbitmap('Telegram.ico')
         self.root.mainloop()

@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox
-import guiFunctions as gf
 import re, ntpath
 from MainGUI import GUI
 
@@ -95,6 +94,4 @@ class TimeGUI(GUI):
             messagebox.showerror("Error", "Please select a month")
             return
 
-   
 
-TimeGUI()
