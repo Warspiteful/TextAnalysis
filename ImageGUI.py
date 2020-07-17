@@ -15,9 +15,10 @@ class TimeGUI(GUI):
     def start(self):
         self.reset()
         label = Label(self.frame, text = "Set .json File Path").pack()
-        self.limit = StringVar()
+        limit =  StringVar()
+        self.limiters.append(limit)
         self.limit.trace('w', self.limit_size)    
-        self.box = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limit, )
+        self.box = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], )
         self.box.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',

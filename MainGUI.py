@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-import json
+import json, sys
 from textAnalysis import textAnalyst, json
 from timeAnalysis import timeAnalyst
 
@@ -8,6 +8,7 @@ class GUI():
     root = Tk()
     v = IntVar()
     s = StringVar()
+    limiters = []
     def __init__(self):
         pass
     
@@ -16,12 +17,19 @@ class GUI():
         self.root.mainloop()
 
     def limit_size(self, *args):
-        value = self.limit.get()
-        if len(value) > 20: self.limit.set(value[:20])
+        for limit in self.limiters:
+            value = limit.get()
+            if len(value) > 20: self.limit.set(value[:20])
 
     def on_closing(self):
-        if messagebox.askyesnocancel("Quit", "Do you want to quit?"):
-            self.root.destroy()
+        try:
+            if messagebox.askyesnocancel("Quit", "Do you want to quit?"):
+                self.frame.destroy()
+                self.root.destroy()
+                
+        except:
+            pass
+            
     
     def reset(self):
         if hasattr(self,'frame'):

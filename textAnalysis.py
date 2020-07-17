@@ -1,4 +1,3 @@
-from fileNames import text1, text2, text3, text4
 from nltk.corpus import stopwords
 from nltk.tokenize import PunktSentenceTokenizer
 from collections import Counter
@@ -155,7 +154,6 @@ class textAnalyst():
         with open(file_path,encoding="utf8") as f:
             data = json.load(f)
 
-
         #List of Dictionaries
         data = data["messages"]
         texts = []
@@ -197,3 +195,4 @@ class textAnalyst():
             writer.write(str((clean_text)))
             writer.write('\n')
         writer.close()
+

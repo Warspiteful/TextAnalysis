@@ -1,7 +1,6 @@
 import json
 import numpy as np
 import matplotlib.pyplot as plt
-from fileNames import json_files
 import ntpath
 
 class timeAnalyst:

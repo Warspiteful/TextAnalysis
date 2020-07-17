@@ -30,7 +30,7 @@ class Text_Analyst_GUI(GUI):
     def create_path_frame(self, selection):
         self.reset()
         self.EntryBoxes = []
-        self.limiters = []
+    
         if selection == 1:
             label = Label(self.frame, text = "Set .txt/.json File Path").pack()
             limit = StringVar()
@@ -64,7 +64,9 @@ class Text_Analyst_GUI(GUI):
             for file in msg:
                 self.files.append(ntpath.basename(file))
             if msg[0][-4:] == 'json':
+              
                 if len(msg) < 2: 
+                    print("".join(msg))
                     self.json_user_select("".join(msg))
                 else:
                     raise Exception
@@ -79,7 +81,7 @@ class Text_Analyst_GUI(GUI):
     def json_user_select(self, json_path):
         self.reset()
         self.json = json_path
-        self.users = gf.get_users(json_path)
+        self.users = self.get_users(json_path)
         
         limit = StringVar()
         limit.trace('w', self.limit_size) 
@@ -103,7 +105,7 @@ class Text_Analyst_GUI(GUI):
             if msg[-3:] != ".txt" and msg[-3:] != "":
                 msg += ".txt"
             self.text_path.delete(0,END)
-            self.ta = gf.textAnalyst([self.json, self.users[self.v.get()-1], msg])
+            self.createTextAnalyst([self.json, self.users[self.v.get()-1], msg])
             self.reset()
             self.create_main_screen()
 
