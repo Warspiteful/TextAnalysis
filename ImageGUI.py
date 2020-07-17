@@ -30,7 +30,7 @@ class TimeGUI(GUI):
         try:
             self.json = self.box.get().strip()
             self.files.append(ntpath.basename(self.json))
-            self.ta = gf.timeAnalyst(self.json)
+            self.createTimeAnalyst(self.json)
             self.root.geometry("")
            
             self.create_main_screen()
@@ -60,7 +60,7 @@ class TimeGUI(GUI):
     def year_entry(self):
         self.reset()
         label = Label(self.frame,text = "Select year").pack()
-        popupMenu = OptionMenu(self.frame, self.v, *gf.get_years(self.json)).pack()
+        popupMenu = OptionMenu(self.frame, self.v, *self.get_years(self.json)).pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Submit", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.year_set).pack()

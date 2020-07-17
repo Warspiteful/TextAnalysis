@@ -70,7 +70,7 @@ class Text_Analyst_GUI(GUI):
                 else:
                     raise Exception
        
-            self.ta = gf.textAnalyst(msg)
+            self.createTextAnalyst(msg)
             self.root.geometry("")
             self.create_main_screen()
         except Exception:
