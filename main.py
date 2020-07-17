@@ -22,10 +22,12 @@ class main(GUI):
 
     def select(self):
         if self.v.get() == 1:
+            self.v.set(None)
             self.reset()
             Text_Analyst_GUI()
         
         if self.v.get() == 2:
+            self.v.set(None)
             self.reset()
             TimeGUI()
 

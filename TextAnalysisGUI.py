@@ -68,9 +68,10 @@ class Text_Analyst_GUI(GUI):
                 if len(msg) < 2: 
                     print("".join(msg))
                     self.json_user_select("".join(msg))
+                    return
                 else:
                     raise Exception
-       
+            
             self.createTextAnalyst(msg)
             self.root.geometry("")
             self.create_main_screen()

@@ -17,7 +17,7 @@ class TimeGUI(GUI):
         label = Label(self.frame, text = "Set .json File Path").pack()
         limit =  StringVar()
         self.limiters.append(limit)
-        self.limit.trace('w', self.limit_size)    
+        limit.trace('w', self.limit_size)    
         self.box = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], )
         self.box.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
@@ -60,7 +60,9 @@ class TimeGUI(GUI):
     def year_entry(self):
         self.reset()
         label = Label(self.frame,text = "Select year").pack()
+        self.v.set(self.get_years(self.json)[0])
         popupMenu = OptionMenu(self.frame, self.v, *self.get_years(self.json)).pack()
+        
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Submit", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.year_set).pack()
@@ -81,7 +83,9 @@ class TimeGUI(GUI):
         self.reset()
         self.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         label = Label(self.frame,text = "Select Month").pack()
+        self.s.set(self.months[0])
         popupMenu = OptionMenu(self.frame, self.s, *self.months).pack()
+   
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Submit", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.month_set).pack()
