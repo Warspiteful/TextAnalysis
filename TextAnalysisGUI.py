@@ -1,9 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
 import re, ntpath
-from MainGUI import GUI
+from baseGUI import GUI
 
-class Text_Analyst_GUI(GUI):
+class TextAnalysisGUI(GUI):
 
 
     def __init__(self): 
@@ -34,17 +34,13 @@ class Text_Analyst_GUI(GUI):
     
         if selection == 1:
             label = Label(self.frame, text = "Set .txt/.json File Path").pack()
-            limit = StringVar()
-            limit.trace('w', self.limit_size)    
-            self.limiters.append(limit)
-            self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], ))
+            
+            self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", ))
         elif selection == 2:
             label = Label(self.frame, text = "Set File Paths").pack()
             for i in range(3):
-                limit = StringVar()
-                limit.trace('w', self.limit_size)    
-                self.limiters.append(limit)
-                self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[i], borderwidth=5 ))
+                
+                self.EntryBoxes.append(Entry(self.frame, bd=0, bg="white",width="20", font="Arial", borderwidth=5 ))
         for box in self.EntryBoxes:
             box.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
@@ -70,7 +66,6 @@ class Text_Analyst_GUI(GUI):
             if msg[0][-4:] == 'json':
               
                 if len(msg) < 2: 
-                    print("".join(msg))
                     self.json_user_select("".join(msg))
                     return
                 else:
@@ -88,23 +83,20 @@ class Text_Analyst_GUI(GUI):
         self.json = json_path
         self.users = self.get_users(json_path)
         
-        limit = StringVar()
-        limit.trace('w', self.limit_size) 
-        self.limiters = [limit]
         label1 = Label(self.frame, text = "Choose User to Pull Data From").pack()
         button1 = Radiobutton(self.frame, text=self.users[0], variable=self.v, value=1)
         button1.pack(anchor=W)
         button2 = Radiobutton(self.frame, text=self.users[1], variable=self.v, value=2)
         button2.pack(anchor=W)
         label2 = Label(self.frame, text = "(Optional) Set text file path ").pack()
-        self.text_path = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], borderwidth=5 )
+        self.text_path = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", borderwidth=5 )
         self.text_path.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
-                        command= self.set_user).pack(anchor=W)
-        button = Button(self.frame, font=("Verdana",12,'bold'), text="Back", width="12", height=1,
+                        command= self.set_user).pack()
+        button2 = Button(self.frame, font=("Verdana",12,'bold'), text="Back", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
-                        command= self.create_path_frame).pack()
+                        command= lambda: self.create_path_frame(1)).pack()
         self.compile()
 
     def set_user(self):

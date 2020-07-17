@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import messagebox
 import re, ntpath
-from MainGUI import GUI
+from baseGUI import GUI
 
 
-class TimeGUI(GUI):
+class statsAnalysisGUI(GUI):
 
     def __init__(self):  
         self.root.title("Statistics Analysis")
@@ -15,10 +15,8 @@ class TimeGUI(GUI):
     def start(self):
         self.reset()
         label = Label(self.frame, text = "Set .json File Path").pack()
-        limit =  StringVar()
-        self.limiters.append(limit)
-        limit.trace('w', self.limit_size)    
-        self.box = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", textvariable=self.limiters[0], )
+        
+        self.box = Entry(self.frame, bd=0, bg="white",width="20", font="Arial", )
         self.box.pack()
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
@@ -30,7 +28,7 @@ class TimeGUI(GUI):
         try:
             self.json = self.box.get().strip()
             self.files.append(ntpath.basename(self.json))
-            self.createTimeAnalyst(self.json)
+            self.createStatAnalyst(self.json)
             self.root.geometry("")
            
             self.create_main_screen()

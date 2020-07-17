@@ -1,7 +1,7 @@
-from MainGUI import GUI
+from baseGUI import GUI
 from tkinter import *
-from TextAnalysisGUI import Text_Analyst_GUI
-from ImageGUI import TimeGUI
+from textAnalysisGUI import TextAnalysisGUI
+from statsAnalysisGUI import statsAnalysisGUI
 
 class main(GUI):
 
@@ -28,12 +28,12 @@ class main(GUI):
         if self.v.get() == 1:
             self.v.set(None)
             self.reset()
-            Text_Analyst_GUI()
+            TextAnalysisGUI()
         
         elif self.v.get() == 2:
             self.v.set(None)
             self.reset()
-            TimeGUI()
+            statsAnalysisGUI()
 
         else:
             return

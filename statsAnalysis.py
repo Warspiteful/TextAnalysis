@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import ntpath
 
-class timeAnalyst:
+class statAnalyst:
     
     #Goal:
     #Dictionary of Messages:

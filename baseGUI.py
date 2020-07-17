@@ -2,25 +2,20 @@ from tkinter import *
 from tkinter import messagebox
 import json, sys
 from textAnalysis import textAnalyst, json
-from timeAnalysis import timeAnalyst
+from statsAnalysis import statAnalyst
 
 class GUI():
     root = Tk()
     v = IntVar()
     s = StringVar()
-    limiters = []
+
     def __init__(self):
         pass
     
     def compile(self):
         self.root.iconbitmap('Telegram.ico')
         self.root.mainloop()
-
-    def limit_size(self, *args):
-        for limit in self.limiters:
-            value = limit.get()
-            if len(value) > 20: self.limit.set(value[:20])
-
+        
     def on_closing(self):
         try:
             if messagebox.askyesnocancel("Quit", "Do you want to quit?"):
@@ -58,5 +53,5 @@ class GUI():
     def createTextAnalyst(self, file):
         self.ta = textAnalyst(file)
     
-    def createTimeAnalyst(self, file):
-        self.ta = timeAnalyst(file)
+    def createStatAnalyst(self, file):
+        self.ta = statAnalyst(file)

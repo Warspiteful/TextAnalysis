@@ -1,3 +1,3 @@
-from main import main
+from starterGUI import main
 
 main()
