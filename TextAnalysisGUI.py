@@ -6,8 +6,7 @@ from MainGUI import GUI
 class Text_Analyst_GUI(GUI):
 
 
-    def __init__(self):
-        print("Weird")    
+    def __init__(self): 
         self.root.title("Text Analysis")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.start()

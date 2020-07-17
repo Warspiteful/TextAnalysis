@@ -20,7 +20,6 @@ class main(GUI):
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.select).pack(anchor=W)
 
-            
     def select(self):
         if self.v.get() == 1:
             self.reset()
@@ -33,4 +32,3 @@ class main(GUI):
         else:
             return
 
-main()
