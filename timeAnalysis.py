@@ -33,7 +33,7 @@ class timeAnalyst:
                 users[message['user']] = 1
             else:
                 users[message['user']] += 1
-        return users, "Messages broken down by sender"
+        self.create_graph(users, "Messages broken down by sender")
 
     def monthly_breakdown(self, found_year):
         months = ["Jan","Feb","Mar","Apr","May", "Jun", "Jul", "Aug", "Sept","Oct","Nov","Dec"]
@@ -41,7 +41,7 @@ class timeAnalyst:
         for message in self.data:
             if(message['year'] == found_year):
                 storage[message['month']-1] += 1
-        return dict(zip(months, storage)), "Breakdown by Month for " + str(found_year) 
+        self.create_graph(dict(zip(months, storage)), "Breakdown by Month for " + str(found_year))
     
     def day_breakdown(self, month):
         months = ["Jan","Feb","Mar","Apr","May", "Jun", "Jul", "Aug", "Sept","Oct","Nov","Dec"]
@@ -55,7 +55,7 @@ class timeAnalyst:
         sorted_days = sorted(day_dict)
         sorted_resuts = [day_dict[index] for index in sorted_days]
 
-        return dict(zip(sorted_days,sorted_resuts)), "Days in " + months[month]
+        self.create_graph(dict(zip(sorted_days,sorted_resuts)), "Days in " + months[month])
     
     def season_breakdown(self):
         seasons = {'winter':0, 'spring': 0, 'summer':0, 'fall':0}
@@ -68,14 +68,14 @@ class timeAnalyst:
                 seasons['summer'] += 1
             else:
                 seasons['fall'] += 1
-        return seasons, "Seasons"
+        self.create_graph(seasons, "Seasons")
 
-    def create_graph(self, data):
-        height = data[0].values()
-        bars = data[0].keys()
+    def create_graph(self, data, title):
+        height = data.values()
+        bars = data.keys()
         
 
-        plt.suptitle(data[1] + " from " + self.text_name)
+        plt.suptitle(title + " from " + self.text_name)
         
         y_pos = np.arange(len(bars))
 

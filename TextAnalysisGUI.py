@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import guiFunctions as gf
 import re, ntpath
-class GUI():
+class Text_Analyst_GUI():
 
     root = Tk()
     v = IntVar()
@@ -10,7 +10,7 @@ class GUI():
     def __init__(self):    
         self.root.title("Text Analysis")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.reset()
+     
         self.start()
         self.compile()
 
@@ -18,6 +18,7 @@ class GUI():
         self.root.mainloop()
 
     def start(self):
+        self.reset()
         button1 = Radiobutton(self.frame, text="Single File (.txt,.json)", variable=self.v, value=1).pack(anchor=W)
         button2 = Radiobutton(self.frame, text="Multi-File (.txt)", variable=self.v, value=2).pack(anchor=W)
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
@@ -25,7 +26,6 @@ class GUI():
                         command= self.send).pack(anchor=W)
     def send(self):
         if self.v.get() > 0:
-            self.reset()
             self.create_path_frame(self.v.get())
         else:
             messagebox.showerror("Error", "Select an option")
@@ -37,7 +37,7 @@ class GUI():
             if len(value) > 20: limiter.set(value[:20])
    
     def create_path_frame(self, selection):
-        
+        self.reset()
         self.EntryBoxes = []
         self.limiters = []
         if selection == 1:
@@ -63,6 +63,7 @@ class GUI():
 
     def on_closing(self):
         if messagebox.askyesnocancel("Quit", "Do you want to quit?"):
+            self.frame.destroy()
             self.root.destroy()
 
     def set_path(self):
@@ -73,15 +74,17 @@ class GUI():
                 msg.append(box.get().strip()) 
             box.delete(0,END)
         try:
+         
             for file in msg:
                 self.files.append(ntpath.basename(file))
-            if msg[0][-4:] == 'json' and len(msg) < 1:
-                self.json_user_select("".join(msg))
-            else:
-                raise Exception
+            if msg[0][-4:] == 'json':
+                if len(msg) < 2: 
+                    self.json_user_select("".join(msg))
+                else:
+                    raise Exception
+       
             self.ta = gf.textAnalyst(msg)
             self.root.geometry("")
-            self.reset()
             self.create_main_screen()
         except Exception:
             messagebox.showerror("Error", "Can not parse provided file path")
@@ -119,7 +122,7 @@ class GUI():
             self.create_main_screen()
 
     def create_main_screen(self):
-        
+        self.reset()
         pos = {"NN":"Noun","VB":"Verb","JJ":"Adjective"}
         pos_word = []
         num = 0
@@ -149,6 +152,10 @@ class GUI():
             text_files_display.insert(END,file + "\n")
         text_files_display.config(state = NORMAL)
 
+        main_screen = Button(self.frame, font=("Verdana",12,'bold'), text="Return", width="12", height=1,
+                        bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                        command= self.start).grid(row = 7, column = 2, columnspan = 2)
+
         similar_word_label = Label(self.frame, text ="Word").grid(row = 2, column = 4)
         similar_word_num_label = Label(self.frame, text ="# Of Similar").grid(row = 2, column = 5)
         self.similar_word_entry = Entry(self.frame, width = 10)
@@ -162,7 +169,6 @@ class GUI():
         self.similar_word_display.grid(row = 5, column = 4, rowspan = 10, columnspan = 2,)
         self.similar_word_display.config(state = DISABLED)
         self.compile()
-
     def find_similar(self):
         self.similar_word_display.config(state = NORMAL)
         self.similar_word_display.delete('1.0', END)
@@ -206,5 +212,4 @@ class GUI():
         self.frame = Frame(self.root)
         self.frame.pack()
     
-   
-GUI()
+Text_Analyst_GUI()
