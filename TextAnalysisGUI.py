@@ -20,6 +20,7 @@ class Text_Analyst_GUI(GUI):
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.send).pack(anchor=W)
+    
     def send(self):
         if self.v.get() > 0:
             self.create_path_frame(self.v.get())
@@ -49,6 +50,9 @@ class Text_Analyst_GUI(GUI):
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.set_path).pack()
+        button = Button(self.frame, font=("Verdana",12,'bold'), text="Back", width="12", height=1,
+                        bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                        command= self.start).pack()
 
         self.compile()
 
@@ -98,6 +102,9 @@ class Text_Analyst_GUI(GUI):
         button = Button(self.frame, font=("Verdana",12,'bold'), text="Send", width="12", height=1,
                         bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
                         command= self.set_user).pack(anchor=W)
+        button = Button(self.frame, font=("Verdana",12,'bold'), text="Back", width="12", height=1,
+                        bd=0, bg="#32de97", activebackground="#3c9d9b",fg='#ffffff',
+                        command= self.create_path_frame).pack()
         self.compile()
 
     def set_user(self):
