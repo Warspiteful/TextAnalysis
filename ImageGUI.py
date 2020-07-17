@@ -8,7 +8,6 @@ from MainGUI import GUI
 class TimeGUI(GUI):
 
     def __init__(self):  
-        super().__init__()
         self.root.title("Statistics Analysis")
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.start()

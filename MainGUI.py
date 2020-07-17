@@ -6,9 +6,13 @@ class GUI():
     s = StringVar()
 
     def __init__(self):
-        pass
+        self.root.title("Telegram Analysis")
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.start()
+        self.compile()
 
     def compile(self):
+        self.root.iconbitmap('Telegram.ico')
         self.root.mainloop()
 
     def limit_size(self, *args):
