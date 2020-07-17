@@ -71,7 +71,7 @@ class Text_Analyst_GUI(GUI):
                     return
                 else:
                     raise Exception
-            
+        
             self.createTextAnalyst(msg)
             self.root.geometry("")
             self.create_main_screen()
